@@ -1,0 +1,11 @@
+{
+  "name": "photometa",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^8.0.0",
+    "modify-exif": "^0.0.1",
+    "piexifjs": "^1.0.6"
+  }
+}
