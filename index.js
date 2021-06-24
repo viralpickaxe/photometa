@@ -13,6 +13,10 @@ const inquirer = require('inquirer');
         {
           name: 'Canon AE-1 Program',
           value: { make: 'Canon', model: 'Canon AE-1 Program', serial: '2124282' },
+        },
+        {
+          name: 'Olympus Infinity Stylus',
+          value: { make: 'Olympus', model: 'Olympus Infinity Stylus', serial: '6068948' },
         }
       ],
     },
@@ -23,7 +27,11 @@ const inquirer = require('inquirer');
       choices: [
         {
           name: 'FD 50mm f/1.8',
-          value: { make: 'Canon', model: 'FD50mm f/1.8', serial: 'T507', maxAperture: [1695994, 1000000], focalLength: [50, 1] },
+          value: { make: 'Canon', model: 'FD50mm f/1.8', serial: 'T507', focalLength: [50, 1] },
+        },
+        {
+          name: 'Olympus 35mm f/3.5',
+          value: { make: 'Olympus', model: '35mm f/3.5', serial: '', focalLength: [35, 1] },
         }
       ],
     },
@@ -35,6 +43,7 @@ const inquirer = require('inquirer');
         { name: 'Kodak Gold 200', value: { name: 'Kodak Gold 200', iso: 200 } },
         { name: 'Kodak Ultra Max 400', value: { name: 'Kodak Ultra Max 400', iso: 400 } },
         { name: 'Kodak Portra 400', value: { name: 'Kodak Portra 400', iso: 400 } },
+        { name: 'Kodak ColorPlus 200', value: { name: 'Kodak ColorPlus 200', iso: 200 } },
       ]
     }
   ]);
@@ -44,6 +53,8 @@ const inquirer = require('inquirer');
   console.log(`Updating ${files.length} files`);
 
   files.forEach(fileName => {
+    if (fileName === '.DS_Store' || fileName === '.gitkeep') return;
+
     const originalFile = fs.readFileSync(`photos/${fileName}`);
 
     const newFile = modifyExif(originalFile, data => {
@@ -54,7 +65,6 @@ const inquirer = require('inquirer');
       data.Exif[piexif.ExifIFD.UserComment] = `Film: ${film.name}`
       data.Exif[piexif.ExifIFD.ISOSpeedRatings] = film.iso
       data.Exif[piexif.ExifIFD.FocalLength] = lense.focalLength
-      data.Exif[piexif.ExifIFD.MaxApertureValue] = lense.maxAperture
       data.Exif[piexif.ExifIFD.BodySerialNumber] = camera.serial
       data.Exif[piexif.ExifIFD.LensMake] = lense.make
       data.Exif[piexif.ExifIFD.LensModel] = lense.model
